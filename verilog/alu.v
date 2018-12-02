@@ -12,11 +12,13 @@ input [10:0]      in0,
                   in1,
 input [3:0]       funct,
 output reg [10:0] out,
-output reg        zero,
-                  overflow
+output reg        overflow,
+output wire       gr_flag,
+                  le_flag,
+                  eq_flag
 );
-  wire [10:0] sum, difference, product;
-  wire [5:0] carryouts, overflows;
+  wire [10:0] sum, difference, product, not_out;
+  wire [5:0] overflows = 0;
   // Module code here
   adder add_module(.out(sum),
               .overflow(overflows[0]),
@@ -32,6 +34,38 @@ output reg        zero,
               .overflow(overflows[2]),
               .a(in0),
               .b(in1));
+
+  // If in0 is all 0s, then out = 127, else out = 0
+  assign not_out = (~&(in0)) ? 11'd127 : 11'b0;
+
+  always @(funct) begin
+    case (funct)
+      `ADDMODULE: begin
+        out = sum;
+        overflow = overflows[0];
+      end
+      `SUBMODULE: begin
+        out = difference;
+        overflow = overflows[1];
+      end
+      `MULMODULE: begin
+        out = product;
+        overflow = overflows[2];
+      end
+      `NOTMODULE: begin
+        out = not_out;
+        overflow = overflows[3];
+      end
+    endcase
+  end
+
+  // FLAGS
+  // If the difference is all 0s, the inputs were equal
+  assign eq_flag = ~&(difference);
+  // If the difference is negative, in0 < in1
+  assign le_flag = difference[10];
+  // If the difference is positive and not all zeros, in0 > in1
+  assign gr_flag = difference[10] ~& eq_flag;
 endmodule
 
 module adder(
