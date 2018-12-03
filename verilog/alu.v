@@ -1,9 +1,9 @@
-`define ADDMODULE 3'd0
-`define SUBMODULE 3'd1
-`define MULMODULE 3'd2
-`define NOTMODULE 3'd3
-`define SLTMODULE 3'd4
-`define SGTMODULE 3'd5
+`define ADDMODULE 4'b1000
+`define SUBMODULE 4'b1001
+`define MULMODULE 4'b1010
+`define NOTMODULE 4'b1011
+`define SLTMODULE 4'b1110
+`define SGTMODULE 4'b1101
 
 // http://www.ece.lsu.edu/ee3755/2012f/l05.v.html - add/sub overflow detection
 

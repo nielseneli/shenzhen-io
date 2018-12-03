@@ -1,16 +1,16 @@
 `define NOP   7'b0000000
-`define MOVRR 7'b0001110
-`define MOVRI 7'b0001111
-`define JMPI  7'b0010001
-`define SLPR  7'b0011010
-`define SLPI  7'b0011001
-`define ADDR  7'b1000010
-`define ADDI  7'b1000001
-`define SUBR  7'b1001010
-`define SUBI  7'b1001001
-`define MULR  7'b1010010
-`define MULI  7'b1010001
-`define NOT   7'b1011000
+`define MOVRR 7'b1100001
+`define MOVRI 7'b1110001
+`define JMPI  7'b0010010
+`define SLPR  7'b0100011
+`define SLPI  7'b0010011
+`define ADDR  7'b0101000
+`define ADDI  7'b0011000
+`define SUBR  7'b0101001
+`define SUBI  7'b0011001
+`define MULR  7'b0101010
+`define MULI  7'b0011010
+`define NOT   7'b0001011
 
 module LUT (
 	input[30:0] instr,
