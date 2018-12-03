@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Sun Dec  2 22:49:01 2018
+[*]
+[dumpfile] "/home/comparch/shenzhen-io/verilog/alu.vcd"
+[dumpfile_mtime] "Sun Dec  2 22:48:41 2018"
+[dumpfile_size] 3364
+[savefile] "/home/comparch/shenzhen-io/verilog/alu.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-5.192611 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testALU.
+[treeopen] testALU.dut.
+[sst_width] 225
+[signals_width] 126
+[sst_expanded] 1
+[sst_vpaned_height] 160
+@420
+testALU.a[10:0]
+testALU.b[10:0]
+@22
+testALU.control[3:0]
+@420
+testALU.out[10:0]
+@28
+testALU.overflow
+[pattern_trace] 1
+[pattern_trace] 0
