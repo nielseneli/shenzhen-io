@@ -25,7 +25,9 @@ always @(posedge clk) begin
 			3'b011: p1 = write_dat;
 		endcase // write_addr
 	end // if (write_en)
+end
 
+always @(read_addr0 || read_addr1 || clk) begin
 	case (read_addr0)
 		3'b000: dat_out0 = acc;
 		3'b010: begin dat_out0 = p0_in; p0 = 0; end //When you read a simple input

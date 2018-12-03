@@ -13,85 +13,161 @@
 `define NOT   7'b1011000
 
 module LUT (
-	input[31:0] instr,
+	input[30:0] instr,
 	output reg wr_en,
 	output reg is_slp,
 	output reg is_mov,
 	output reg is_jmp,
-	output reg Aa,
-	output reg Aw,
+	output reg[2:0] Aa,
+	output reg[2:0] Aw,
 	output reg Da_or_Imm0,
 	output reg Db_or_Imm1
 	);
 
-always @(instr)
-	wr_en = 0;
-	is_slp = 0;
-	is_mov = 0;
-	is_jmp = 0;
-	Aa = instr[9:11];
-	Aw = instr[9:11];
-	Da_or_Imm0 = 0;
-	Db_or_Imm1 = 0;
+always @(instr) begin
 
-	case (instr[2:8]) begin
-		NOP: begin
+	case (instr[28:22])
+		`NOP: begin
+			wr_en = 0;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		MOVRR: begin
+		`MOVRR: begin
 			wr_en = 1;
+			is_slp = 0;
 			is_mov = 1;
-			Aw = instr[12:14];
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[18:16];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		MOVRI: begin
+		`MOVRI: begin
 			wr_en = 1;
+			is_slp = 0;
 			is_mov = 1;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
 			Da_or_Imm0 = 1;
+			Db_or_Imm1 = 0;
 		end
 
-		JMPI: begin
+		`JMPI: begin
+			wr_en = 0;
+			is_slp = 0;
+			is_mov = 0;
 			is_jmp = 1;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		SLPR: begin
+		`SLPR: begin
+			wr_en = 0;
 			is_slp = 1;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		SLPI: begin
+		`SLPI: begin
+			wr_en = 0;
 			is_slp = 1;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
 			Da_or_Imm0 = 1;
+			Db_or_Imm1 = 0;
 		end
 
-		ADDR: begin
+		`ADDR: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		ADDI: begin
+		`ADDI: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
 			Da_or_Imm0 = 1;
+			Db_or_Imm1 = 0;
 		end
 
-		SUBR: begin
+		`SUBR: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		SUBI: begin
+		`SUBI: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
 			Da_or_Imm0 = 1;
+			Db_or_Imm1 = 0;
 		end
 
-		MULR: begin
+		`MULR: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
-		MULI: begin
+		`MULI: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
 			Da_or_Imm0 = 1;
+			Db_or_Imm1 = 0;
 		end
 
-		NOT: begin
+		`NOT: begin
 			wr_en = 1;
+			is_slp = 0;
+			is_mov = 0;
+			is_jmp = 0;
+			Aa = instr[21:19];
+			Aw = instr[21:19];
+			Da_or_Imm0 = 0;
+			Db_or_Imm1 = 0;
 		end
 
 
