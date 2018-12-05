@@ -41,7 +41,7 @@ output wire              gr_flag,
   // If in0 is all 0s, then out = 127, else out = 0
   assign not_out = ~| in0 ? 11'd127 : 11'b0;
 
-  always @(funct) begin
+  always @(*) begin
     case (funct)
       `ADDMODULE: begin
         out = sum;
@@ -58,6 +58,10 @@ output wire              gr_flag,
       `NOTMODULE: begin
         out = not_out;
         overflow = not_of;
+      end
+      default: begin
+        out = 0;
+        overflow = 0;
       end
     endcase
   end
