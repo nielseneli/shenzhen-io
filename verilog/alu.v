@@ -30,8 +30,8 @@ output wire              gr_flag,
 
   subber sub_module(.out(difference),
               .overflow(sub_of),
-              .a(in0),
-              .b(in1));
+              .b(in0),
+              .a(in1));
 
   multiplier mul_module(.out(product),
               .overflow(prod_of),
