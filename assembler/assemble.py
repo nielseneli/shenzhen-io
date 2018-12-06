@@ -25,7 +25,7 @@ def get_machine_code(regex_instr):
         cond = "00"
     funct = functs.get(regex_instr[2][0])
     regs = "".join([registers[reg] for reg in regex_instr[3]])
-    imms = "".join([np.binary_repr(int(imm), width=11) for imm in regex_instr[4].reverse()])
+    imms = "".join([np.binary_repr(int(imm), width=11) for imm in reversed(regex_instr[4])])
 
     # Concatenate together appropriately based on number and type of arguments
     args_lens = (len(regex_instr[3]), len(regex_instr[4]))
