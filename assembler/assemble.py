@@ -12,18 +12,25 @@ CONDITION = re.compile(r"(\+|\-)")
 INSTRUCTION = re.compile('|'.join(list(functs)))
 ARG_REG = re.compile('|'.join(list(registers)))
 ARG_INT = re.compile(r" -?\d+")
+ARG_LABEL = re.compile(r" \w*$")
 
-REGEX_LIST = [LABEL, CONDITION, INSTRUCTION, ARG_REG, ARG_INT]
+REGEX_LIST = [LABEL, CONDITION, INSTRUCTION, ARG_REG, ARG_INT, ARG_LABEL]
 
 def parse_instr(instr):
     return [regex.findall(instr) for regex in REGEX_LIST]
 
-def get_machine_code(regex_instr):
+def get_machine_code(regex_instr, labels):
     try:
         cond = conditionals.get(regex_instr[1][0])
     except IndexError:
         cond = "00"
-    funct = functs.get(regex_instr[2][0])
+    try:
+        funct = functs.get(regex_instr[2][0])
+    except IndexError:
+        return "0000000000000000000000000000000"
+    if funct == "0010":
+        addr = np.binary_repr(labels.index([(regex_instr[5][0])[1:] + ":"]), width=11)
+        return "".join([cond, opcodes.get("i"), funct, "0"*11, addr])
     regs = "".join([registers[reg] for reg in regex_instr[3]])
     imms = "".join([np.binary_repr(int(imm), width=11) for imm in reversed(regex_instr[4])])
 
@@ -47,7 +54,10 @@ def write_to_file(destfname, instrs):
         f.write("\n".join(instrs))
 
 def assemble(fname, destfname, loop):
-    instrs = [get_machine_code(parse_instr(instr)) for instr in get_instrs(fname)]
+    instrs = get_instrs(fname)
+    labels = [LABEL.findall(instr) for instr in instrs]
+    print(labels)
+    instrs = [get_machine_code(parse_instr(instr), labels) for instr in instrs]
     if loop == "loop":
         instrs.append("0000100100000000000000000000000")
     write_to_file(destfname, instrs)
