@@ -5,6 +5,10 @@
 `define SLTMODULE 4'b1110
 `define SGTMODULE 4'b1101
 
+`define TEQ 4'b1100
+`define TGT 4'b1101
+`define TLT 4'b1110
+
 // http://www.ece.lsu.edu/ee3755/2012f/l05.v.html - add/sub overflow detection
 
 module alu (
@@ -13,9 +17,7 @@ input signed [10:0]      in0,
 input [3:0]              funct,
 output reg signed [10:0] out,
 output reg               overflow,
-output wire              gr_flag,
-                         le_flag,
-                         eq_flag
+output reg [1:0]         cond_flag
 );
   wire [10:0] sum, difference, product, not_out;
   // wire add_of = 0;
@@ -46,33 +48,55 @@ output wire              gr_flag,
       `ADDMODULE: begin
         out = sum;
         overflow = add_of;
+        cond_flag = 0;
       end
       `SUBMODULE: begin
         out = difference;
         overflow = sub_of;
+        cond_flag = 0;
       end
       `MULMODULE: begin
         out = product;
         overflow = prod_of;
+        cond_flag = 0;
       end
       `NOTMODULE: begin
         out = not_out;
         overflow = not_of;
+        cond_flag = 0;
       end
+      `TEQ: begin
+        out = 0;
+        overflow = 0;
+        if (in0 == in1)
+          cond_flag = 2'b01;
+        else
+          cond_flag = 2'b10;
+      end
+      `TGT: begin
+        out = 0;
+        overflow = 0;
+        if (in0 > in1)
+          cond_flag = 2'b01;
+        else
+          cond_flag = 2'b10;
+      end
+      `TLT: begin
+        out = 0;
+        overflow = 0;
+        if (in0 < in1)
+          cond_flag = 2'b01;
+        else
+          cond_flag = 2'b10;
+      end
+
       default: begin
         out = 0;
         overflow = 0;
+        cond_flag = 0;
       end
     endcase
   end
-
-  // FLAGS
-  // If the difference is all 0s, the inputs were equal
-  assign eq_flag = (in0 === in1);
-  // If the difference is negative, in0 < in1
-  assign le_flag = (in0 < in1);
-  // If the difference is positive and not all zeros, in0 > in1
-  assign gr_flag = (in0 > in1);
 endmodule
 
 module adder(

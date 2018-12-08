@@ -19,10 +19,10 @@ module MC9999 (
 //Program counter logic
 reg[3:0] program_counter = 0;
 wire[3:0] next_program_counter;
-wire wr_en, is_slp, is_mov, is_jmp, Da_or_Imm0, Db_or_Imm1;
-wire[2:0] Aa, Aw;
+wire wr_en, is_slp, is_mov, is_jmp, is_cond, Da_or_Imm0, Db_or_Imm, Imm0_or_Imm1;
+wire[2:0] Aa, Ab, Aw;
 wire sleep_output;
-wire[10:0] Da_or_Imm0_val, Db_or_Imm1_val;
+wire[10:0] Da_or_Imm0_val, Db_or_Imm_val;
 wire[10:0] Imm0, Imm1;
 
 always @(posedge clk) begin
@@ -57,11 +57,23 @@ datamemory #(4, 2**4, 31) instructionMemory(
 	.writeEnable(1'b0),
 	.dataIn(31'b0));
 
+reg noop_sel = 0;
+reg[1:0] cond = 2'b0;
+wire[1:0] instr_cond;
+assign instr_cond = fetched_instruction[30:29];
+always @(*) begin
+	if (sleep_output)
+		noop_sel=1;
+	else if (instr_cond != 2'b00 && instr_cond != cond)
+		noop_sel = 1;
+	else
+		noop_sel=0;
+end
 mux #(31) noOPMux(
 	.input0(fetched_instruction),
 	.input1(31'b0),
 	.out(final_instruction),
-	.sel(sleep_output));
+	.sel(noop_sel));
 
 
 //LUT
@@ -71,10 +83,13 @@ LUT LUT(
 	.is_slp(is_slp),
 	.is_mov(is_mov),
 	.is_jmp(is_jmp),
+	.is_cond(is_cond),
 	.Aa(Aa),
+	.Ab(Ab),
 	.Aw(Aw),
 	.Da_or_Imm0(Da_or_Imm0),
-	.Db_or_Imm1(Db_or_Imm1));
+	.Db_or_Imm(Db_or_Imm),
+	.Imm0_or_Imm1(Imm0_or_Imm1));
 
 //Regfile
 wire[10:0] write_dat, Da, Db;
@@ -87,7 +102,7 @@ MC3999regFile regFile(
 	.p0_in(p0_in),
 	.p1_in(p1_in),
 	.read_addr0(Aa),
-	.read_addr1(3'b000), //acc
+	.read_addr1(Ab), //acc
 	.clk(clk),
 
 	.p0_out(p0_out),
@@ -109,27 +124,38 @@ mux #(11) DaMux(
 	.sel(Da_or_Imm0),
 	.out(Da_or_Imm0_val));
 
+wire[10:0] Imm0_or_Imm1_val;
+mux #(11) Imm0orImm1Mux(
+	.input0(Imm0),
+	.input1(Imm1),
+	.sel(Imm0_or_Imm1),
+	.out(Imm0_or_Imm1_val));
+
 mux #(11) DbMux(
 	.input0(Db),
-	.input1(final_instruction[21:11]), //Imm1
-	.sel(Db_or_Imm1),
-	.out(Db_or_Imm1_val));
+	.input1(Imm0_or_Imm1_val),
+	.sel(Db_or_Imm),
+	.out(Db_or_Imm_val));
 
 wire overflow;
 wire[10:0] alu_result;
+wire[1:0] alu_cond_result;
 alu ALU(
 	.in0(Da_or_Imm0_val),
-	.in1(Db_or_Imm1_val),
+	.in1(Db_or_Imm_val),
 	.funct(final_instruction[25:22]), //funct
 	.out(alu_result),
 	.overflow(overflow),
-	.gr_flag(),
-	.le_flag(),
-	.eq_flag());
+	.cond_flag(alu_cond_result));
 
 mux #(11) aluResultMux(
 	.input0(alu_result),
 	.input1(Da_or_Imm0_val),
 	.sel(is_mov),
 	.out(write_dat));
+
+always @(posedge clk) begin
+	if (is_cond)
+		cond = alu_cond_result;
+end
 endmodule
