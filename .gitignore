@@ -1,0 +1,10 @@
+# extra python stuff
+assembler/__pycache__
+*.pyc
+
+# no assembled files
+*.text
+
+# compiled verilog and variable dumps
+*.vvp
+*.vcd
