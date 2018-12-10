@@ -39,15 +39,21 @@ always @(posedge clk) begin
 			3'b010: p0_out = write_dat;
 			3'b011: p1_out = write_dat;
 			3'b100: begin //x0
+				// If you're writing to an xbus, but haven't pushed your data yet
+				// Push data, update output write state
 				if (x0_write_out == 0) begin
 					x0_write_out = 1;
 					x0_out = write_dat;
-				end // if (x0_write_out == 0)
+				end
 				else begin
+					// If you're writing and HAVE pushed data
+					// If you're being read, clear outputs
 					if (x0_read_in == 1) begin
 						x0_out = 0;
 						x0_write_out = 0;
 					end // if (x0_read_in == 1)
+					//If you're not being read, don't change anything about your outputs
+					//The PC won't increment
 				end
 			end // x0
 
@@ -84,18 +90,9 @@ always @(*) begin
 		3'b000: dat_out0 = acc;
 		3'b010: begin dat_out0 = p0_in; end //When you read a simple input
 		3'b011: begin dat_out0 = p1_in; end //Clear the corresponding output
-		3'b100: begin //x0
-			if (x0_read_out == 0)
-				x0_read_out = 1;
-			else
-				x0_read_out = 0;
-		end
-		3'b101: begin //x1
-			if (x1_read_out == 0)
-				x1_read_out = 1;
-			else
-				x0_read_out = 0;
-		end
+
+		3'b100:	x0_read_out = 1; //x0
+		3'b101: x1_read_out = 1; //x1
 		default: dat_out0 = 11'b0;
 	endcase
 
@@ -103,20 +100,17 @@ always @(*) begin
 		3'b000: dat_out1 = acc;
 		3'b010: begin dat_out1 = p0_in; end
 		3'b011: begin dat_out1 = p1_in; end
-		3'b100: begin //x0
-			if (x0_read_out == 0)
-				x0_read_out = 1;
-			else
-				x0_read_out = 0;
-		end
-		3'b101: begin //x1
-			if (x1_read_out == 0)
-				x1_read_out = 1;
-			else
-				x0_read_out = 0;
-		end
+
+		3'b100:	x0_read_out = 1; //x0
+		3'b101: x1_read_out = 1; //x1
 		default: dat_out1 = 11'b0;
 	endcase
+
+	// If neither port is reading an xbus input, clear its read_out
+	if (read_addr0 != 3'b100 && read_addr1 != 3'b100)
+		x0_read_out = 0;
+	if (read_addr0 != 3'b101 && read_addr1 != 3'b101)
+		x1_read_out = 0;
 
 	//if we're reading or writing an xbus
 	if (write_addr == 3'b100 || write_addr == 3'b101 || read_addr0 == 3'b100 || read_addr0 == 3'b101 || read_addr1 == 3'b100 || read_addr1 == 3'b101) begin
