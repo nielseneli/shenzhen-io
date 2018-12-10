@@ -10,9 +10,21 @@ module MC9999 (
 	input posedge_big_clk,
 	input[10:0] p0_in,
 	input[10:0] p1_in,
+	input[10:0] x0_in,
+	input[10:0] x1_in,
+	input x0_read_in,
+	input x1_read_in,
+	input x0_write_in,
+	input x1_write_in,
 
 	output[10:0] p0_out,
-	output[10:0] p1_out
+	output[10:0] p1_out,
+	output[10:0] x0_out,
+	output[10:0] x1_out,
+	output x0_read_out,
+	output x1_read_out,
+	output x0_write_out,
+	output x1_write_out
 );
 
 
@@ -21,12 +33,12 @@ reg[3:0] program_counter = 0;
 wire[3:0] next_program_counter;
 wire wr_en, is_slp, is_mov, is_jmp, is_cond, Da_or_Imm0, Db_or_Imm, Imm0_or_Imm1;
 wire[2:0] Aa, Ab, Aw;
-wire sleep_output;
+wire sleep_output, increment_pc;
 wire[10:0] Da_or_Imm0_val, Db_or_Imm_val;
 wire[10:0] Imm0, Imm1;
 
 always @(posedge clk) begin
-	if (~sleep_output) program_counter <= next_program_counter;
+	if (sleep_output==0 && increment_pc==1) program_counter <= next_program_counter;
 end // always @(posedge clk)
 
 
@@ -103,12 +115,25 @@ MC3999regFile regFile(
 	.p1_in(p1_in),
 	.read_addr0(Aa),
 	.read_addr1(Ab), //acc
+	.x0_in(x0_in),
+	.x1_in(x1_in),
+	.x0_read_in(x0_read_in),
+	.x1_read_in(x1_read_in),
+	.x0_write_in(x0_write_in),
+	.x1_write_in(x1_write_in),
 	.clk(clk),
 
 	.p0_out(p0_out),
 	.p1_out(p1_out),
 	.dat_out0(Da),
-	.dat_out1(Db));
+	.dat_out1(Db),
+	.x0_out(x0_out),
+	.x1_out(x1_out),
+	.x0_read_out(x0_read_out),
+	.x1_read_out(x1_read_out),
+	.x0_write_out(x0_write_out),
+	.x1_write_out(x1_write_out),
+	.increment_pc(increment_pc));
 
 mux #(3) writeAddrMux(
 	.input0(3'b000),
