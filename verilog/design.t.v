@@ -67,8 +67,8 @@ module design_tests();
     // Assumes compact memory map, _word_ addressed memory implementation
     //   -> .text segment starts at word address 0
     //   -> .data segment starts at word address 2048 (byte address 0x2000)
-		$readmemb(mem_text_fn1, dut.dut1.instructionMemory.memory, 0);
-		$readmemb(mem_text_fn2, dut.dut2.instructionMemory.memory, 0);
+		$readmemb(mem_text_fn1, dut.dut0.instructionMemory.memory, 0);
+		$readmemb(mem_text_fn2, dut.dut1.instructionMemory.memory, 0);
 
 		// Dump waveforms to file
 		// Note: arrays (e.g. memory) are not dumped by default
@@ -82,8 +82,8 @@ module design_tests();
 		// automatically report the results.
 		$display("Time | PC       | Instruction");
 		repeat(3) begin
-	        $display("%4t | %h | %h", $time, dut.dut2.program_counter, dut.dut2.final_instruction);
-	        $display("%4t | %h | %h", $time, dut.dut1.program_counter, dut.dut1.final_instruction); #20 ;
+	        $display("DUT0 | %4t | %h | %h", $time, dut.dut0.program_counter, dut.dut0.final_instruction);
+	        $display("DUT1 | %4t | %h | %h", $time, dut.dut1.program_counter, dut.dut1.final_instruction); #20 ;
 	        end
 		$display("... more execution (see waveform)");
 
