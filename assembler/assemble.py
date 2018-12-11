@@ -53,16 +53,14 @@ def write_to_file(destfname, instrs):
     with open(destfname, 'w') as f:
         f.write("\n".join(instrs))
 
-def assemble(fname, destfname, loop):
+def assemble(fname, destfname):
     instrs = get_instrs(fname)
     labels = [LABEL.findall(instr) for instr in instrs]
     print(labels)
     instrs = [get_machine_code(parse_instr(instr), labels) for instr in instrs]
-    if loop == "loop":
-        instrs.append("0000100100000000000000000000000")
+    instrs.append("0000100100000000000000000000000")
     write_to_file(destfname, instrs)
 
 if __name__ == "__main__":
-    print(str(sys.argv))
-    assemble(sys.argv[1], sys.argv[2], sys.argv[3])
+    assemble(sys.argv[1], sys.argv[2])
     # assemble('xbus_example_1.asm', 'xbus_example_1.text')
