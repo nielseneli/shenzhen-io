@@ -1,9 +1,9 @@
 # shenzhen-io
 Computer Architecture final project
 
-Description
+A simulation of Zachtronics' [Shenzhen I/O](http://www.zachtronics.com/shenzhen-io/). Microcontrollers are simulated in Verilog and run code assembled with Python. You can view the resulting waveforms in GTKWave. We tried to match the game pretty well; how our simulation differs from [this manual](http://shenzhen-io.wikia.com/wiki/File:SHENZHEN_IO_Manual.pdf) is detailed in our design decisions, and documentation for our ISA and CPUs is available below.
 
-Motivation
+We needed a final project for our Computer Architecture class and this seemed fun and challenging, especially exploring communication protocols.
 
 ## Required software
 
