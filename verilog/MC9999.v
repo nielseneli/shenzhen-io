@@ -1,9 +1,9 @@
-`include "mux.v"
-`include "sleep.v"
-`include "datamemory.v"
-`include "LUT.v"
-`include "registers.v"
-`include "alu.v"
+`include "verilog/mux.v"
+`include "verilog/sleep.v"
+`include "verilog/datamemory.v"
+`include "verilog/LUT.v"
+`include "verilog/registers.v"
+`include "verilog/alu.v"
 
 module MC9999 (
 	input clk,

@@ -1,4 +1,4 @@
-`include "MC9999.v"
+`include "verilog/MC9999.v"
 
 module designx(
 input         clk,

@@ -1,4 +1,4 @@
-`include "design.v"
+`include "verilog/design.v"
 
 module design_tests();
 	// Input and output to the design

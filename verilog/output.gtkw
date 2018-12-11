@@ -1,0 +1,20 @@
+[*]
+[*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
+[*] Tue Dec 11 19:18:06 2018
+[*]
+[dumpfile] "/home/comparch/shenzhen-io/verilog/design.vcd"
+[dumpfile_mtime] "Tue Dec 11 19:17:33 2018"
+[dumpfile_size] 64981
+[savefile] "/home/comparch/shenzhen-io/verilog/output.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-10.832719 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 225
+[signals_width] 182
+[sst_expanded] 1
+[sst_vpaned_height] 160
+@22
+design_tests.output_signal[10:0]
+[pattern_trace] 1
+[pattern_trace] 0
