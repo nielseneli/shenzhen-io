@@ -7,18 +7,25 @@ Motivation
 
 ## Required software
 
-- python3
+Our project uses the following software (downloadable at the links):
+
+- [python3](https://www.python.org/)
   - numpy
-- Icarus Verilog
-- gtkwave
+- [Icarus Verilog](http://iverilog.icarus.com/)
+- [GTKWave](http://gtkwave.sourceforge.net/)
 
 ## How to run
 
-To run the python assembler, run:
+From inside the `verilog` folder:
+
 ```bash
-python3 assembler/assemble.py PathToAssemblyFile PathToMachineCodeFile loop
+python3 ../assembler/assemble.py PathToAssemblyFile PathToMachineCodeFile
+iverilog -o -Wall design.vvp design.t.v
+./design.vvp
+gtkwave PathToVCDFile
 ```
-This will assemble the assembly file into machine code, with a line at the end that jumps to the beginning. If you don't want to have the line at the end that jumps to the beginning, write something else instead of `loop`.
+
+After running the third command, you will receive prompts for what arguments are necessary.
 
 ## Architecture
 
