@@ -8,7 +8,7 @@ module designB_tests();
 	reg         clk = 0;
 	reg         posedge_big_clk = 0;
 	reg  [31:0] counter = 0;
-	reg  [31:0] big_clk_time = 200;
+	reg  [31:0] big_clk_time = 2000;
 
 	// Start the clocks - big_clk is 22 clk cycles
 	always begin
@@ -73,7 +73,7 @@ module designB_tests();
 		// $display("... more execution (see waveform)");
 
 		// End execution after some time delay
-		#5000
+		#50000
 		$finish();
 	end
 
