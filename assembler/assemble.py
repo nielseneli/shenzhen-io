@@ -56,7 +56,6 @@ def write_to_file(destfname, instrs):
 def assemble(fname, destfname):
     instrs = get_instrs(fname)
     labels = [LABEL.findall(instr) for instr in instrs]
-    print(labels)
     instrs = [get_machine_code(parse_instr(instr), labels) for instr in instrs]
     instrs.append("0000100100000000000000000000000")
     write_to_file(destfname, instrs)
