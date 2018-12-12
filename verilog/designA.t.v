@@ -1,6 +1,6 @@
 `include "verilog/design.v"
 
-module design_tests();
+module designA_tests();
 	// Input and output to the design
 	reg  [10:0] input_signal;
 	wire [10:0] output_signal;
@@ -24,16 +24,10 @@ module design_tests();
 	end
 
 	// Design under test
-	designx dut(.clk(clk),
+	designA dut(.clk(clk),
 				.posedge_big_clk(posedge_big_clk),
 				.input_signal(),
 				.output_signal(output_signal));
-	// MC9999 dut(.clk(clk),
-	// 	.posedge_big_clk(posedge_big_clk),
-	// 	.p0_in(p0_in),
-	// 	.p1_in(p1_in),
-	// 	.p0_out(p0_out),
-	// 	.p1_out(p1_out));
 
 	// Filenames for memory images and VCD dump file
   reg [1023:0] mem_text_fn1, mem_text_fn2;
@@ -77,23 +71,16 @@ module design_tests();
 
 
 		// Display a few cycles just for quick checking
-		// Note: I'm just dumping instruction bits, but you can do some
-		// self-checking test cases based on your CPU and program and
-		// automatically report the results.
-		$display("Time | PC       | Instruction");
-		repeat(3) begin
-	        $display("DUT0 | %4t | %h | %h", $time, dut.dut0.program_counter, dut.dut0.final_instruction);
-	        $display("DUT1 | %4t | %h | %h", $time, dut.dut1.program_counter, dut.dut1.final_instruction); #20 ;
-	        end
-		$display("... more execution (see waveform)");
+		// $display("Time | PC       | Instruction");
+		// repeat(3) begin
+	  //       $display("DUT0 | %4t | %h | %h", $time, dut.dut0.program_counter, dut.dut0.final_instruction);
+	  //       $display("DUT1 | %4t | %h | %h", $time, dut.dut1.program_counter, dut.dut1.final_instruction); #20 ;
+	  //       end
+		// $display("... more execution (see waveform)");
 
-		// End execution after some time delay - adjust to match your program
-		// or use a smarter approach like looking for an exit syscall or the
-		// PC to be the value of the last instruction in your program.
+		// End execution after some time delay
 		#5000
-		// if(cpu.register.mux1.input2==32'h3a)
-		// 	$display("Fib Test Successful");
 		$finish();
 	end
 
-endmodule // MC9999_test
+endmodule
