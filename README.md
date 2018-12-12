@@ -21,13 +21,12 @@ Our project uses the following software (downloadable at the links):
 From inside the `verilog` folder:
 
 ```bash
-python3 ../assembler/assemble.py PathToAssemblyFile PathToMachineCodeFile
-iverilog -o -Wall design.vvp design.t.v
-./design.vvp
-gtkwave PathToVCDFile
+./run.sh module_name asmFileName1 asmFileName2 ...
 ```
 
-After running the third command, you will receive prompts for what arguments are necessary.
+This assumes that all of your asm filenames are in the `assembler` folder (please do not give it the file extensions for those). the `module_name` variable can be `A`, `B`, or any the letter X in any designX.t.v test bench you write.
+
+Currently, module A is two MC3999 modules: chip 1 x0 is connected to chip 2 x0, chip 2 p0 is connected to the output signal. Module B is one MC3999 module, with output signal connected to p0.
 
 ## Architecture
 ### ISA
